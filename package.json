@@ -1,0 +1,9 @@
+{
+  "name": "nx-enterprise-workshop-demos",
+  "description": "Demo apps for the Nx Enterprise Workshop(s) slide deck.",
+  "dependencies": {
+    "rxjs": "5.5.6",
+    "console-log-html": "2.0.2"
+  },
+  "version": "1.0.0"
+}
