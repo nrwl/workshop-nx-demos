@@ -13,7 +13,7 @@ import { of }       from 'rxjs/observable/of';
 import {
   switchMap, map, concat,
   startWith, filter, takeWhile, bufferCount,
-  tap, concatMap, delay
+  tap, concatMap, delay, debounceTime
 } from 'rxjs/operators';
 
 // ************************************
@@ -22,13 +22,17 @@ import {
 
 
 const observer = marbleLogTo("root");
-const myObs$ = from([2, 30, 22, 5, 60, 1]);
+const myObs$ = Observable.create(observer => {
+  observer.next(1);
+  setTimeout(() => observer.next(2), 110);
+  setTimeout(() => observer.next(3), 150);
+  setTimeout(() => observer.next(4), 200);
+  setTimeout(() => observer.next(5), 350);
+});
 
-myObs$.subscribe( observer );    // Original stream
+from([1, 2, 3, 4, 5]).subscribe( observer );    // Original stream
 myObs$
   .pipe(
-    tap(x => {                   // Using tap() Operator
-      console.log(`emitted value = ${x}`);
-    })
+    debounceTime(100)                           // Using debounceTime() Operator
   )
   .subscribe( observer );
