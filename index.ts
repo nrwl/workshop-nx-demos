@@ -23,14 +23,14 @@ import {
 
 const observer = marbleLogTo("root");
 const myObs$ = of(
-        of(1, 2),                // inner observables
-        of(3, 4),
-        of(5, 6)
+        of(1, 2).pipe(delay(1)),  // inner observables
+        of(3, 4).pipe(delay(1)),
+        of(5, 6).pipe(delay(1))
       );
 
 myObs$.subscribe( observer );    // Original stream
 myObs$
   .pipe(
-    flatMap(x => x)              // Using debounceTime() Operator
+    switchMap(x => x)              // Using debounceTime() Operator
   )
   .subscribe( observer );
