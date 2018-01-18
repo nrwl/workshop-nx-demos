@@ -1,4 +1,4 @@
-import { logTo } from './console-log';
+import { logTo, marbleLogTo } from './console-log';
 
 // RxJS Imports
 import { Observable } from "rxjs/Observable";
@@ -14,3 +14,15 @@ import {
 // ************************************
 // Demo Code
 // ************************************
+
+const myObs$ = Observable.create( observer => {
+
+  observer.next(1);
+  observer.next(2);
+  observer.next(3);
+
+  observer.complete();
+
+});
+
+myObs$.subscribe( logTo("logOutput") );
