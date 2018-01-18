@@ -21,13 +21,17 @@ import {
 // ************************************
 
 const myObs$ = Observable.create( observer => {
-
   observer.next(1);
   observer.next(2);
-  observer.error('oops');
+  observer.next(3);
 
   observer.complete();
-
 });
 
-myObs$.subscribe( marbleLogTo("logOutput") );
+myObs$.subscribe( marbleLogTo("root") );    // Original stream
+
+myObs$
+  .pipe(
+    map(x => 10 * x )                       // Using Map() Operator
+  )
+  .subscribe( marbleLogTo("root") );
