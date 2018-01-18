@@ -27,6 +27,8 @@ const myObs$ = from([2, 30, 22, 5, 60, 1]);
 myObs$.subscribe( observer );    // Original stream
 myObs$
   .pipe(
-    filter(x => x > 10 )         // Using filter() Operator
+    tap(x => {                   // Using tap() Operator
+      console.log(`emitted value = ${x}`);
+    })
   )
   .subscribe( observer );
