@@ -20,18 +20,13 @@ import {
 // Demo Code
 // ************************************
 
-const myObs$ = Observable.create( observer => {
-  observer.next(1);
-  observer.next(2);
-  observer.next(3);
 
-  observer.complete();
-});
+const observer = marbleLogTo("root");
+const myObs$ = from([2, 30, 22, 5, 60, 1]);
 
-myObs$.subscribe( marbleLogTo("root") );    // Original stream
-
+myObs$.subscribe( observer );    // Original stream
 myObs$
   .pipe(
-    map(x => 10 * x )                       // Using Map() Operator
+    filter(x => x > 10 )         // Using filter() Operator
   )
-  .subscribe( marbleLogTo("root") );
+  .subscribe( observer );
