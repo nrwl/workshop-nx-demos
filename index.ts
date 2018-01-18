@@ -13,7 +13,7 @@ import { fromEvent} from 'rxjs/observable/fromEvent';
 import { of }       from 'rxjs/observable/of';
 
 import {
-  switchMap, map, flatMap, merge,
+  switchMap, map, flatMap, merge, scan,
   startWith, filter, takeWhile, bufferCount, take,
   tap, concatMap, delay, debounceTime, distinctUntilChanged
 } from 'rxjs/operators';
@@ -21,28 +21,16 @@ import {
 // ************************************
 // Demo Code
 // ************************************
-
-
 const observer = marbleLogTo("root");
-let obs1$ = of(1, 2);
-let obs2$ = of(3, 4);
-let obs3$ = of(5, 6);
 
-// Emit most-recent value of each observable...
-// grouped as a single emitted value
-concat([obs1$, obs2$, obs3$])
-  .pipe(
-    flatMap(x => x)
-  )
-  .subscribe( observer )
+let obs1$ = of(1, 2, 3, 4, 5, 6);
 
+    // Emit stream values
+    obs1$.subscribe( observer );
 
-// Show how concatMap() can be used...
-var target = document.getElementById("btnStart");
-var clicks = fromEvent(target, 'click');
-    clicks.pipe(
-      concatMap(ev => interval(1000).pipe(
-          take(4)
-      ))
-    )
-    .subscribe( observer );
+    // Emit values with accumulator function...
+    obs1$
+      .pipe(
+        scan((x, y) => x + y)
+      )
+      .subscribe( observer )
