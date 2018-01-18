@@ -7,11 +7,11 @@ import { Observable } from "rxjs/Observable";
 import { defer }    from 'rxjs/observable/defer';
 import { interval } from 'rxjs/observable/interval';
 import { timer }    from 'rxjs/observable/timer';
-import { from } from 'rxjs/observable/from';
+import { from }     from 'rxjs/observable/from';
 import { of }       from 'rxjs/observable/of';
 
 import {
-  switchMap, map, concat,
+  switchMap, map, concat, flatMap,
   startWith, filter, takeWhile, bufferCount,
   tap, concatMap, delay, debounceTime, distinctUntilChanged
 } from 'rxjs/operators';
@@ -22,11 +22,15 @@ import {
 
 
 const observer = marbleLogTo("root");
-const myObs$ = of(1, 2, 2, 3);
+const myObs$ = of(
+        of(1, 2),                // inner observables
+        of(3, 4),
+        of(5, 6)
+      );
 
 myObs$.subscribe( observer );    // Original stream
 myObs$
   .pipe(
-    distinctUntilChanged()                           // Using debounceTime() Operator
+    flatMap(x => x)              // Using debounceTime() Operator
   )
   .subscribe( observer );
