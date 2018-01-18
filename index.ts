@@ -4,6 +4,7 @@ import { marbleLogTo } from './console-log';
 import { Scheduler } from 'rxjs/Rx';
 import { Observable } from "rxjs/Observable";
 
+import { forkJoin }    from 'rxjs/observable/forkJoin';
 import { defer }    from 'rxjs/observable/defer';
 import { interval } from 'rxjs/observable/interval';
 import { timer }    from 'rxjs/observable/timer';
@@ -22,11 +23,10 @@ import {
 
 
 const observer = marbleLogTo("root");
-let myObservable$ = of(1, 2, 3);
-let otherObservable$ = of(10, 20, 30);
+let obs1$ = of(1, 2);
+let obs2$ = of(3, 4);
+let obs3$ = of(5, 6);
 
-myObservable$
-  .pipe(
-    merge( otherObservable$ )              // merge() Operator
-  )
-  .subscribe( observer );
+// Emit most-recent value of each observable...
+// grouped as a single emitted value
+forkJoin(obs1$, obs2$, obs3$).subscribe( observer );
